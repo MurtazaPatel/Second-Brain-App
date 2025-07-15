@@ -1,0 +1,40 @@
+import { mongo, Schema } from "mongoose";
+import mongoose from "mongoose";
+const ObjectId = mongoose.Types.ObjectId;
+import { string } from "zod";
+import { required } from "zod/v4/core/util.cjs";
+import ta from "zod/v4/locales/ta.cjs";
+
+const UserSchema = new Schema({
+    username: { type: String, unique: true, required: true },
+    passwordHash: { type: String, required: true }
+})
+
+const ContentSchema = new Schema({
+    link: { type: String, required: true },
+    type: { type: String, required: true, enum: ['image', 'video', 'article', 'audio', 'tweet', 'InstaReel', 'InstaPost'] },
+    title: { type: String },
+    tags: [{ type: ObjectId, ref:"tags" }],
+    userId: {
+        type: ObjectId,
+        ref: "users"
+    }
+})
+
+const TagsSchema = new Schema({
+    title: {type:String, required:true}
+})
+
+const LinkSchema = new Schema({
+    hash : {type:String},
+    userId: {type:ObjectId , ref:"users"}
+})
+
+
+const userModel = mongoose.model("users", UserSchema);
+const contentModel = mongoose.model("contents", ContentSchema);
+const tagModel = mongoose.model("tags", TagsSchema);
+const linkModel = mongoose.model("links", LinkSchema);
+
+
+export  {userModel, contentModel, tagModel, linkModel}
