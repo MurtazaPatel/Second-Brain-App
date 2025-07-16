@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv"
 import UserRouter from "./routes/user";
+import contentRouter from "./routes/content";
 
 dotenv.config({ path: './.env' })
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 //user endpoints
 
 app.use("/api/v1/user/", UserRouter);
+app.use('/api/v1/content/',contentRouter)
 
 async function main() {
     if (!mongo) {

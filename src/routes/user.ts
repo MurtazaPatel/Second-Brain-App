@@ -4,7 +4,6 @@ import bcrypt from "bcrypt"
 import { userModel } from '../db'
 import dotenv from "dotenv"
 import jwt from "jsonwebtoken";
-import { request } from "http";
 dotenv.config({ path: './.env' })
 const secret = process.env.JWT_USER_SECRET;
 if (!secret) {
@@ -89,6 +88,7 @@ UserRouter.post('/signin', async (req, res) => {
                 res.header("Authorization", `Bearer ${token}`);
                 res.status(200).json({
                     msg: "User Signed in, Welcome back " + username + " !!",
+                    id:user._id,
                     token: token
                 })
             }).catch((err) => {
