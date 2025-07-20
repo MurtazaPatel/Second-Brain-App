@@ -11,7 +11,8 @@ type content = {
     type: string;
     link: string;
     title: string;
-    tags: string[]
+    tags: string[],
+    tagTitles: string[]
 }
 
 interface CustomRequest extends Request {
@@ -224,7 +225,7 @@ contentRouter.delete('/', async (req: CustomRequest, res) => {
 
 })
 
-export default contentRouter;
+export { contentRouter, getUserId, content};
 
 
 /* content type

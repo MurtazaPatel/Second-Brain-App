@@ -1,7 +1,6 @@
-import jwt, { decode, JwtPayload, Secret } from "jsonwebtoken"
+import jwt, {  JwtPayload, Secret } from "jsonwebtoken"
 import { Request, Response, NextFunction } from "express"
 import dotenv from "dotenv"
-import { userModel } from "./db";
 dotenv.config({ path: "./.env" })
 const secret = process.env.JWT_USER_SECRET as Secret;
 

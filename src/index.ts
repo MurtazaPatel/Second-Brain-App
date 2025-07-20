@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv"
 import UserRouter from "./routes/user";
-import contentRouter from "./routes/content";
+import {contentRouter} from "./routes/content";
+import brainRouter from "./routes/brain";
 
 dotenv.config({ path: './.env' })
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use("/api/v1/user/", UserRouter);
 app.use('/api/v1/content/',contentRouter)
+app.use('/api/v1/brain/',brainRouter)
 
 async function main() {
     if (!mongo) {

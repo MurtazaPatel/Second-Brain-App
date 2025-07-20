@@ -4,6 +4,7 @@ import bcrypt from "bcrypt"
 import { userModel } from '../db'
 import dotenv from "dotenv"
 import jwt from "jsonwebtoken";
+import { nanoid } from "nanoid";
 dotenv.config({ path: './.env' })
 const secret = process.env.JWT_USER_SECRET;
 if (!secret) {
@@ -44,14 +45,18 @@ UserRouter.post('/signup', async (req, res) => {
                 })
             }
             else {
+                const shareId = nanoid(16);
                 const user = await userModel.create({
                     username: username,
-                    passwordHash: passHash
+                    passwordHash: passHash,
+                    shareId
                 });
+
                 console.log(user)
                 res.status(200).json({
                     msg: "New user created, Welcome " + username + " to Second Brain!!",
-                    id:user._id
+                    id:user._id,
+                    shareId
                 })
             }
         } else {
@@ -103,8 +108,10 @@ UserRouter.post('/signin', async (req, res) => {
             })
         }
     } catch (error) {
+        const err : string = error as string;
         res.status(500).json({
-            msg: "Internal Server Error!!"
+            msg: "Internal Server Error!!",
+            error : err
         })
     }
 })
