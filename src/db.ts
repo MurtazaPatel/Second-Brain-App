@@ -1,25 +1,24 @@
-import { mongo, Schema } from "mongoose";
+import { Schema } from "mongoose";
 import mongoose from "mongoose";
-import { required } from "zod/v4/core/util.cjs";
 const ObjectId = mongoose.Types.ObjectId;
 
 
 const UserSchema = new Schema({
     username: { type: String, unique: true, required: true },
     passwordHash: { type: String, required: true },
-    shareId : {type: String , required:true}
+    shareId: { type: String, required: true }
 })
 
 const ContentSchema = new Schema({
     link: { type: String, required: true },
     type: { type: String, required: true, enum: ['image', 'video', 'article', 'audio', 'tweet', 'InstaReel', 'InstaPost'] },
     title: { type: String, required: true },
-    tags: [{ type: ObjectId, ref: "tags" }],
+    tags: [{ type: ObjectId, ref: "tags", required: true }],
     userId: {
         type: ObjectId,
         ref: "users"
     },
-    tagTitles : [{type: String}]
+
 })
 
 const TagsSchema = new Schema({

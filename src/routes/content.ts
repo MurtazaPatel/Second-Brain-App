@@ -7,18 +7,24 @@ import z from "zod"
 import mongoose from "mongoose";
 const contentRouter = Router();
 
+type customTag = {
+    _id: mongoose.Types.ObjectId | string;
+    title: string
+}
+
 type content = {
+    _id: mongoose.Types.ObjectId | string;
     type: string;
     link: string;
     title: string;
-    tags: string[],
-    tagTitles: string[]
+    tags: customTag[];
+    tagTitles: string[],
+
 }
 
 interface CustomRequest extends Request {
     username?: string
 }
-
 
 
 contentRouter.use((req: CustomRequest, res: Response, next: NextFunction) => {
@@ -190,7 +196,7 @@ contentRouter.get('/', async (req: CustomRequest, res) => {
         console.log("fetching contents....")
         const contents = await contentModel.find({
             userId
-        });
+        }).populate('tags', 'title');
         console.log("contents fetched successfully....")
 
         res.json({
@@ -208,24 +214,27 @@ contentRouter.get('/', async (req: CustomRequest, res) => {
 
 contentRouter.delete('/', async (req: CustomRequest, res) => {
     console.log(req.body)
-    const contentId  :mongoose.Types.ObjectId = req.body.contentId ;
-    const check = await contentModel.findById({
-        _id: contentId
+    const contentId: mongoose.Types.ObjectId = req.body.contentId;
+    const check = await userModel.find({
+        username: req.username
     })
+    const content = await contentModel.findById(
+        contentId
+    )
 
-    if (!check) {
+    if (check != content?.userId) {
         res.status(403).json({
-            msg:"Ooops, trying to delete a doc you don't own?!"
+            msg: "Ooops, trying to delete a doc you don't own?!"
         })
     }
-    await contentModel.deleteOne({_id:contentId})
+    await contentModel.deleteOne({ _id: contentId })
     res.json({
-        msg:"Delete Succeeded !!"
+        msg: "Delete Succeeded !!"
     })
 
 })
 
-export { contentRouter, getUserId, content};
+export { contentRouter, getUserId, content };
 
 
 /* content type
