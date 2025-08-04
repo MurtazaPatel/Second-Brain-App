@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import UserRouter from "./routes/user";
 import {contentRouter} from "./routes/content";
 import brainRouter from "./routes/brain";
+import cors from "cors"
 
 dotenv.config({ path: './.env' })
 const app = express();
@@ -13,6 +14,7 @@ if (!mongo) {
 }
 
 app.use(express.json());
+app.use(cors())
 
 //user endpoints
 
@@ -37,3 +39,4 @@ async function main() {
 }
 
 main();
+
